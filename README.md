@@ -4,16 +4,16 @@
 ```
 # replace sample values with correct values
 export SERVER_PORT=8080
-export DB_HOST=localhost
+export DB_HOST=database
 export DB_PORT=5432
 export DB_NAME=stew
 export DB_USER=postgres
 export DB_PASSWORD=postgres
 ```
 
-#### Create image
+#### Create image (don't miss copying the final ".")
 ```
-sudo docker build -t app-name \
+sudo docker build -t stew-java-springboot \
     --build-arg SERVER_PORT=$SERVER_PORT \
     --build-arg DB_HOST=$DB_HOST \
     --build-arg DB_PORT=$DB_PORT \
@@ -23,14 +23,16 @@ sudo docker build -t app-name \
     .
 ```
 
-#### Run container (assuming environment variables defined)
+#### Run dbms and service
 ```
-sudo docker run -dp $SERVER_PORT:$SERVER_PORT \
-    -e SERVER_PORT=$SERVER_PORT \
-    -e DB_HOST=$DB_HOST \
-    -e DB_PORT=$DB_PORT \
-    -e DB_NAME=$DB_NAME \
-    -e DB_USER=$DB_USER \
-    -e DB_PASSWORD=$DB_PASSWORD \
-    app-name
+sudo -E docker compose up
 ```
+
+#### Create database
+```
+psql -h $DB_HOST -p $DB_PORT -U $DB_USER -c "create database $DB_NAME;"
+
+```
+
+#### Check that a service is up & running at _localhost:$SERVER_PORT/$SERVICE_NAME_ 
+##### (please substitute $SERVER_PORT and $SERVICE_NAME with the correct values)
